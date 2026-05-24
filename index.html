@@ -5,43 +5,269 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Wholistic Life</title>
     <style>
-        body {
-            background-color: #0f1117;
+        * {
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            font-family: system-ui, -apple-system, sans-serif;
+            box-sizing: border-box;
         }
-        .video-container {
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background-color: #0f1117;
+            color: #e1e4ed;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* ----- HEADER & NAV ----- */
+        header {
+            text-align: center;
+            padding: 60px 20px 20px;
+            background: linear-gradient(135deg, #1a1c2a 0%, #0f1117 100%);
+            border-bottom: 1px solid #2a2d3a;
+        }
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+        header p.site-description {
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+            color: #a0a5b5;
+        }
+
+        /* ----- INTRO TEXT SECTION (you can add more if needed) ----- */
+        .intro-text {
             max-width: 800px;
-            width: 90%;
-            margin: 20px auto;
+            margin: 30px auto;
+            padding: 0 20px;
+            text-align: center;
+            color: #c5c9d4;
+            font-size: 1rem;
+        }
+        .intro-text p {
+            margin-bottom: 1em;
+        }
+
+        /* ----- VIDEO GRID ----- */
+        .videos-section {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .videos-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: #ffffff;
             text-align: center;
         }
-        video {
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        /* Video Card */
+        .video-card {
+            background: #1a1c2a;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            border: 1px solid #2a2d3a;
+        }
+        .video-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+            border-color: #4a4f66;
+        }
+        .video-card img {
             width: 100%;
-            height: auto;
-            border-radius: 8px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.6);
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+            display: block;
             background: #000;
         }
-        p {
-            color: #a0a5b5;
-            font-size: 0.9rem;
-            margin-top: 16px;
+        .video-card .card-info {
+            padding: 15px;
+        }
+        .video-card .card-title {
+            font-weight: 600;
+            font-size: 1.05rem;
+            color: #ffffff;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .video-card .card-duration {
+            font-size: 0.85rem;
+            color: #8a8fa0;
+        }
+
+        /* ----- MODAL (Video Player) ----- */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            position: relative;
+            max-width: 900px;
+            width: 95%;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .modal video {
+            width: 100%;
+            display: block;
+            max-height: 80vh;
+            background: #000;
+        }
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 28px;
+            color: #ffffff;
+            background: rgba(0,0,0,0.5);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: background 0.2s;
+        }
+        .modal-close:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        /* ----- FOOTER (optional) ----- */
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: #5a5f72;
+            font-size: 0.85rem;
+            border-top: 1px solid #2a2d3a;
+            margin-top: 40px;
         }
     </style>
 </head>
 <body>
-    <div class="video-container">
-        <video controls width="100%">
-            <source src="https://yourwholisticlife-videos.b-cdn.net/The+soul.mp4" type="video/mp4">
-            Your browser does not support the video tag. Please try a modern browser.
-        </video>
-        <p>▶️ Streaming via Bunny CDN + Backblaze B2</p>
+
+    <!-- ========== HEADER: TITLE & DESCRIPTION ========== -->
+    <header>
+        <h1>Your Wholistic Life</h1>
+        <p class="site-description">Exploring mind, body, and spirit through authentic conversation.</p>
+    </header>
+
+    <!-- ========== INTRO TEXT: ADD ANY MESSAGE YOU WANT ========== -->
+    <div class="intro-text">
+        <p>Welcome to our video library. Here you'll find talks, guides, and reflections to support your journey. Feel free to browse and click any video to watch it instantly.</p>
+        <p>New videos are added regularly. Thank you for being here. 🙏</p>
     </div>
+
+    <!-- ========== VIDEO LIBRARY ========== -->
+    <div class="videos-section">
+        <h2>📺 Latest Videos</h2>
+        <div class="video-grid" id="videoGrid">
+            <!-- Video cards will be generated by JavaScript below -->
+        </div>
+    </div>
+
+    <!-- ========== VIDEO PLAYER MODAL ========== -->
+    <div class="modal" id="videoModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModal">&times;</button>
+            <video id="modalVideo" controls width="100%">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+
+    <!-- ========== FOOTER ========== -->
+    <footer>
+        © 2026 Your Wholistic Life &mdash; Built with 💚 and self‑hosted freedom.
+    </footer>
+
+    <script>
+        // ========================
+        // YOUR VIDEO LIBRARY
+        // Add as many videos as you like. Just copy the object format below.
+        // ========================
+        const videoLibrary = [
+            {
+                title: "The Soul",
+                thumbnail: "https://yourwholisticlife-videos.b-cdn.net/thumb-soul.jpg",
+                videoUrl: "https://yourwholisticlife-videos.b-cdn.net/The+soul.mp4",
+                duration: "12:34"   // optional, just for display
+            },
+            // Add more videos here like this:
+            // {
+            //     title: "Another Video Title",
+            //     thumbnail: "https://yourwholisticlife-videos.b-cdn.net/thumb-another.jpg",
+            //     videoUrl: "https://yourwholisticlife-videos.b-cdn.net/another-video.mp4",
+            //     duration: "8:22"
+            // }
+        ];
+
+        // ---------- Build the Grid ----------
+        const grid = document.getElementById('videoGrid');
+        videoLibrary.forEach(video => {
+            const card = document.createElement('div');
+            card.className = 'video-card';
+            card.innerHTML = `
+                <img src="${video.thumbnail}" alt="${video.title}" loading="lazy">
+                <div class="card-info">
+                    <div class="card-title">${video.title}</div>
+                    <div class="card-duration">${video.duration || ''}</div>
+                </div>
+            `;
+            card.addEventListener('click', () => openModal(video.videoUrl));
+            grid.appendChild(card);
+        });
+
+        // ---------- Modal Logic ----------
+        const modal = document.getElementById('videoModal');
+        const modalVideo = document.getElementById('modalVideo');
+        const closeBtn = document.getElementById('closeModal');
+
+        function openModal(videoUrl) {
+            modalVideo.querySelector('source').src = videoUrl;
+            modalVideo.load();   // reload the video element
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            modalVideo.pause();
+            modalVideo.querySelector('source').src = '';
+        }
+
+        closeBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
+        });
+    </script>
 </body>
 </html>
