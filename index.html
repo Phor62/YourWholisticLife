@@ -196,7 +196,7 @@
     <div class="modal" id="videoModal">
         <div class="modal-content">
             <button class="modal-close" id="closeModal">&times;</button>
-            <video id="modalVideo" controls width="100%">
+            <video id="modalVideo" controls width="100%" playsinline>
                 Your browser does not support the video tag.
             </video>
         </div>
@@ -250,15 +250,24 @@
         const closeBtn = document.getElementById('closeModal');
 
         function openModal(videoUrl) {
-            modalVideo.querySelector('source').src = videoUrl;
-            modalVideo.load();   // reload the video element
+            // Clear any existing source to avoid conflicts
+            modalVideo.innerHTML = '';
+            // Create a new source element
+            const source = document.createElement('source');
+            source.src = videoUrl;
+            source.type = 'video/mp4';
+            modalVideo.appendChild(source);
+            // Set the src directly on the video element as well
+            modalVideo.src = videoUrl;
+            modalVideo.load();
             modal.classList.add('active');
         }
 
         function closeModal() {
             modal.classList.remove('active');
             modalVideo.pause();
-            modalVideo.querySelector('source').src = '';
+            modalVideo.innerHTML = '';  // clean up
+            modalVideo.src = '';
         }
 
         closeBtn.addEventListener('click', closeModal);
